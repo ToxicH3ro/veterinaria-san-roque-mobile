@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # 🐾 Veterinaria San Roque
 
@@ -135,3 +136,6 @@ La versión actual incluye los módulos principales de gestión veterinaria y fa
 ## 👨‍💻 Repositorio
 
 GitHub: https://github.com/ToxicH3ro/veterinaria-san-roque-mobile
+=======
+# veterinaria-san-roque-mobile
+>>>>>>> origin/main
