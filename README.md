@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # 🐾 Veterinaria San Roque
 
 Aplicación móvil para la gestión de una clínica veterinaria, desarrollada con React Native, Expo, TypeScript y Firebase.
@@ -138,4 +136,3 @@ La versión actual incluye los módulos principales de gestión veterinaria y fa
 GitHub: https://github.com/ToxicH3ro/veterinaria-san-roque-mobile
 =======
 # veterinaria-san-roque-mobile
->>>>>>> origin/main
