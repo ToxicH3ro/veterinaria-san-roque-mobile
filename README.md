@@ -1,56 +1,137 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# 🐾 Veterinaria San Roque
 
-## Get started
+Aplicación móvil para la gestión de una clínica veterinaria, desarrollada con React Native, Expo, TypeScript y Firebase.
+El proyecto busca facilitar la administración de mascotas, citas veterinarias, pacientes, inventario y facturación, mediante interfaces diferenciadas para clientes y personal veterinario.
 
-1. Install dependencies
+# 👩‍💻 Integrante
+
+**Mariana Beatriz González López**
+
+Proyecto desarrollado de manera individual.
+
+## 📋 Características
+
+### 👤 Módulo de clientes
+- Registro e inicio de sesión.
+- Gestión de mascotas.
+- Consulta y gestión de citas veterinarias.
+- Consulta del historial de atención.
+- Consulta de pagos.
+- Gestión del perfil de usuario.
+
+### 🩺 Módulo administrativo y veterinario
+- Panel de inicio.
+- Gestión de citas.
+- Administración de pacientes.
+- Gestión de inventario.
+- Administración de facturación.
+- Seguimiento del estado de las facturas.
+- Confirmación de pagos registrados.
+- Gestión de usuarios.
+
+### 💳 Facturación y pagos
+- Registro de facturas.
+- Asociación de facturas con usuarios.
+- Gestión de estados de facturación.
+- Simulación del proceso de pago dentro de la aplicación.
+- Confirmación del pago por parte del personal autorizado.
+
+> Los pagos son simulados con fines demostrativos. La aplicación no procesa transacciones bancarias reales.
+
+## 🛠️ Tecnologías utilizadas
+
+- React Native
+- Expo
+- TypeScript
+- Firebase Authentication
+- Cloud Firestore
+- Expo Router
+- JavaScript / Node.js
+- Git y GitHub
+
+## 📁 Estructura del proyecto
+
+```text
+src/
+├── app/
+│   ├── (auth)/
+│   ├── (user)/
+│   ├── (admin)/
+│   ├── _layout.tsx
+│   ├── index.tsx
+│   └── dashboard.tsx
+├── components/
+│   └── ui/
+├── services/
+├── hooks/
+├── context/
+├── lib/
+├── types/
+├── constants/
+└── utils/
+
+assets/
+├── images/
+├── icons/
+└── fonts/
+```
+
+## ⚙️ Requisitos previos
+
+Antes de ejecutar el proyecto, instala:
+
+- Node.js en una versión compatible con el SDK de Expo utilizado.
+- npm.
+- Expo Go o un entorno de ejecución compatible con Expo.
+- Una cuenta y un proyecto de Firebase configurado para la aplicación.
+
+## 🚀 Instalación
+
+1. Clona el repositorio:
+
+   ```bash
+   git clone https://github.com/ToxicH3ro/veterinaria-san-roque-mobile.git
+   ```
+
+2. Entra en la carpeta:
+
+   ```bash
+   cd veterinaria-san-roque-mobile
+   ```
+
+3. Instala las dependencias:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+4. Configura Firebase según los requisitos del proyecto.
+
+5. Inicia la aplicación:
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+Sigue las instrucciones que aparecen en la terminal para ejecutar la aplicación en un dispositivo o emulador compatible.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 🔥 Configuración de Firebase
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+La aplicación utiliza Firebase para los servicios de autenticación y almacenamiento de información.
 
-## Get a fresh project
+Para ejecutar el proyecto, debes disponer de una configuración válida de Firebase y habilitar los servicios requeridos por la aplicación.
 
-When you're ready, run:
+No publiques claves privadas, contraseñas, archivos de cuentas de servicio ni otros secretos en el repositorio.
 
-```bash
-npm run reset-project
-```
+Las reglas de seguridad de Firestore deben configurarse de acuerdo con los permisos que necesita cada tipo de usuario.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🧪 Estado del proyecto
 
-### Other setup steps
+Proyecto académico en desarrollo.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+La versión actual incluye los módulos principales de gestión veterinaria y facturación implementados para la entrega. Algunas funciones auxiliares y mejoras de arquitectura quedan pendientes para futuras etapas.
 
-## Learn more
+## 👨‍💻 Repositorio
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+GitHub: https://github.com/ToxicH3ro/veterinaria-san-roque-mobile
