@@ -1,7 +1,5 @@
-import { auth, db } from '@/lib/firebase';
+import { registrarConCorreo } from '@/services/authService';
 import { router } from 'expo-router';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import {
   Alert,
@@ -26,107 +24,106 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async () => {
-    if (
-      !nombre.trim() ||
-      !apellido.trim() ||
-      !correo.trim() ||
-      !telefono.trim() ||
-      !direccion.trim() ||
-      !password ||
-      !confirmPassword
-    ) {
+  
+const handleRegister = async () => {
+  if (
+    !nombre.trim() ||
+    !apellido.trim() ||
+    !correo.trim() ||
+    !telefono.trim() ||
+    !direccion.trim() ||
+    !password ||
+    !confirmPassword
+  ) {
+    Alert.alert(
+      'Campos incompletos',
+      'Por favor completa todos los campos.'
+    );
+    return;
+  }
+
+ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(correo.trim())) {
+    Alert.alert(
+      'Correo inválido',
+      'Ingresa un correo electrónico válido.'
+    );
+    return;
+  }
+
+  if (password.length < 6) {
+    Alert.alert(
+      'Contraseña inválida',
+      'La contraseña debe tener al menos 6 caracteres.'
+    );
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    Alert.alert(
+      'Contraseñas diferentes',
+      'Las contraseñas no coinciden.'
+    );
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const credential = await registrarConCorreo({
+      nombre,
+      apellido,
+      correo,
+      telefono,
+      direccion,
+      contrasena: password,
+    });
+
+    console.log(
+      'Usuario registrado:',
+      credential.user.uid
+    );
+
+    Alert.alert(
+      'Cuenta creada',
+      'Tu cuenta ha sido creada correctamente.',
+      [
+        {
+          text: 'Continuar',
+          onPress: () => router.replace('/dashboard'),
+        },
+      ]
+    );
+  } catch (error: any) {
+    console.error('Error al registrar usuario:', error);
+
+    if (error.code === 'auth/email-already-in-use') {
       Alert.alert(
-        'Campos incompletos',
-        'Por favor completa todos los campos.'
+        'Correo registrado',
+        'Ya existe una cuenta con este correo electrónico.'
       );
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(correo.trim())) {
+    } else if (error.code === 'auth/invalid-email') {
       Alert.alert(
         'Correo inválido',
-        'Ingresa un correo electrónico válido.'
+        'El correo electrónico no es válido.'
       );
-      return;
-    }
-
-    if (password.length < 6) {
+    } else if (error.code === 'auth/weak-password') {
       Alert.alert(
-        'Contraseña inválida',
+        'Contraseña débil',
         'La contraseña debe tener al menos 6 caracteres.'
       );
-      return;
-    }
-
-    if (password !== confirmPassword) {
+    } else {
       Alert.alert(
-        'Contraseñas diferentes',
-        'Las contraseñas no coinciden.'
+        'Error',
+        'No fue posible crear la cuenta. Inténtalo nuevamente.'
       );
-      return;
     }
+  } finally {
+    setLoading(false);
+  }
+};
 
-    try {
-      setLoading(true);
-
-      const credential = await createUserWithEmailAndPassword(
-        auth,
-        correo.trim(),
-        password
-      );
-
-      const uid = credential.user.uid;
-
-      await setDoc(doc(db, 'usuarios', uid), {
-        nombre: nombre.trim(),
-        apellido: apellido.trim(),
-        correo: correo.trim(),
-        telefono: telefono.trim(),
-        direccion: direccion.trim(),
-        rol: 'usuario',
-      });
-
-      Alert.alert(
-        'Cuenta creada',
-        'Tu cuenta ha sido creada correctamente.',
-        [
-          {
-            text: 'Continuar',
-            onPress: () => router.replace('/login'),
-          },
-        ]
-      );
-    } catch (error: any) {
-      console.error('Error al registrar usuario:', error);
-
-      if (error.code === 'auth/email-already-in-use') {
-        Alert.alert(
-          'Correo registrado',
-          'Ya existe una cuenta con este correo electrónico.'
-        );
-      } else if (error.code === 'auth/invalid-email') {
-        Alert.alert(
-          'Correo inválido',
-          'El correo electrónico no es válido.'
-        );
-      } else if (error.code === 'auth/weak-password') {
-        Alert.alert(
-          'Contraseña débil',
-          'La contraseña debe tener al menos 6 caracteres.'
-        );
-      } else {
-        Alert.alert(
-          'Error',
-          'No fue posible crear la cuenta. Inténtalo nuevamente.'
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <ScrollView

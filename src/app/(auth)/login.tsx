@@ -1,7 +1,11 @@
-import { auth } from '@/lib/firebase';
 import { router } from 'expo-router';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
+
+import {
+  iniciarSesionConCorreo,
+  iniciarSesionConGoogle,
+} from '@/services/authService';
+
 import {
   Alert,
   ImageBackground,
@@ -20,78 +24,114 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!correo.trim() || !password) {
+ 
+const handleLogin = async () => {
+  if (!correo.trim() || !password) {
+    Alert.alert(
+      'Campos incompletos',
+      'Ingresa tu correo electrónico y contraseña.'
+    );
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(correo.trim())) {
+    Alert.alert(
+      'Correo inválido',
+      'Ingresa un correo electrónico válido.'
+    );
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const credential = await iniciarSesionConCorreo(
+      correo,
+      password
+    );
+
+    console.log('Usuario autenticado:', credential.user.uid);
+
+    Alert.alert(
+      'Inicio de sesión correcto',
+      'Has iniciado sesión correctamente.',
+      [
+        {
+          text: 'Continuar',
+          onPress: () => router.replace('/dashboard'),
+        },
+      ]
+    );
+  } catch (error: any) {
+    console.error('Error al iniciar sesión:', error);
+
+    if (
+      error.code === 'auth/invalid-credential' ||
+      error.code === 'auth/wrong-password' ||
+      error.code === 'auth/user-not-found'
+    ) {
       Alert.alert(
-        'Campos incompletos',
-        'Ingresa tu correo electrónico y contraseña.'
+        'Datos incorrectos',
+        'El correo o la contraseña son incorrectos.'
       );
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(correo.trim())) {
+    } else if (error.code === 'auth/invalid-email') {
       Alert.alert(
         'Correo inválido',
-        'Ingresa un correo electrónico válido.'
+        'El correo electrónico no es válido.'
       );
+    } else if (error.code === 'auth/too-many-requests') {
+      Alert.alert(
+        'Demasiados intentos',
+        'Se han realizado demasiados intentos. Inténtalo nuevamente más tarde.'
+      );
+    } else {
+      Alert.alert(
+        'Error',
+        'No fue posible iniciar sesión. Inténtalo nuevamente.'
+      );
+    }
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleGoogleLogin = async () => {
+  try {
+    setLoading(true);
+
+    const credential = await iniciarSesionConGoogle();
+
+    // Si el usuario cancela Google Sign-In, no hacemos nada.
+    if (!credential) {
       return;
     }
 
-    try {
-      setLoading(true);
+    console.log(
+      'Usuario autenticado con Google:',
+      credential.user.uid
+    );
 
-      const credential = await signInWithEmailAndPassword(
-        auth,
-        correo.trim(),
-        password
-      );
+    router.replace('/dashboard');
+  } catch (error: any) {
+    console.error('Error al iniciar sesión con Google:', error);
 
-      console.log('Usuario autenticado:', credential.user.uid);
-
+    if (error.code === 'auth/account-exists-with-different-credential') {
       Alert.alert(
-        'Inicio de sesión correcto',
-        'Has iniciado sesión correctamente.',
-        [
-          {
-            text: 'Continuar',
-            onPress: () => router.replace('/dashboard'),
-          },
-        ]
+        'Cuenta existente',
+        'Este correo ya está registrado con otro método de autenticación.'
       );
-    } catch (error: any) {
-      console.error('Error al iniciar sesión:', error);
-
-      if (
-        error.code === 'auth/invalid-credential' ||
-        error.code === 'auth/wrong-password' ||
-        error.code === 'auth/user-not-found'
-      ) {
-        Alert.alert(
-          'Datos incorrectos',
-          'El correo o la contraseña son incorrectos.'
-        );
-      } else if (error.code === 'auth/invalid-email') {
-        Alert.alert(
-          'Correo inválido',
-          'El correo electrónico no es válido.'
-        );
-      } else if (error.code === 'auth/too-many-requests') {
-        Alert.alert(
-          'Demasiados intentos',
-          'Se han realizado demasiados intentos. Inténtalo nuevamente más tarde.'
-        );
-      } else {
-        Alert.alert(
-          'Error',
-          'No fue posible iniciar sesión. Inténtalo nuevamente.'
-        );
-      }
-    } finally {
-      setLoading(false);
+    } else {
+      Alert.alert(
+        'Error de Google',
+        'No fue posible iniciar sesión con Google. Inténtalo nuevamente.'
+      );
     }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <ScrollView
@@ -164,10 +204,18 @@ export default function Login() {
         <Text style={styles.socialTitle}>O continua con:</Text>
 
         <View style={styles.socialRow}>
-          <Text style={styles.socialIcon}>🌐</Text>
-          <Text style={styles.socialIcon}>📘</Text>
-          <Text style={styles.socialIcon}>🐦</Text>
-        </View>
+        <TouchableOpacity
+        style={styles.socialGoogle}
+        onPress={handleGoogleLogin}
+        disabled={loading}
+        activeOpacity={0.7}
+        >
+        <Text style={styles.socialIcon}>G</Text>
+        <Text style={styles.googleText}>
+      Continuar con Google
+        </Text>
+      </TouchableOpacity>
+      </View>
       </View>
     </ScrollView>
   );
@@ -298,8 +346,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  twitterIcon: {
-    color: '#262626',
-    fontSize: 28,
-  },
+socialGoogle: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 10,
+  paddingHorizontal: 18,
+  paddingVertical: 8,
+  borderWidth: 1,
+  borderColor: '#E5DADA',
+  borderRadius: 7,
+  backgroundColor: '#FFFFFF',
+},
+
+googleText: {
+  fontSize: 13,
+  color: '#262626',
+  fontWeight: '600',
+},
 });

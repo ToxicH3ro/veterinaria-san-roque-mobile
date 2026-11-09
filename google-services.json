@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "358287432264",
+    "project_id": "veterinaria-san-roque",
+    "storage_bucket": "veterinaria-san-roque.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358287432264:android:06be55ed3f2b9ec3f9d67d",
+        "android_client_info": {
+          "package_name": "com.veterinariasanroque.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358287432264-o6hjok0e4rdo9t31v54na4q37kcrgkri.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.veterinariasanroque.mobile",
+            "certificate_hash": "c61aa29bd442f17b93b37a6f2d3c8efbd9997588"
+          }
+        },
+        {
+          "client_id": "358287432264-p8c2ndtgdvvhv9g4o5qqdbf28r0npih1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoWq9AXr45HUskkuLOJ-jNV0rc7TY3vFc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358287432264-p8c2ndtgdvvhv9g4o5qqdbf28r0npih1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

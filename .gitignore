@@ -41,3 +41,18 @@ example
 # generated native folders
 /ios
 /android
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# Credenciales y secretos
+serviceAccountKey.json
+service-account*.json
+*serviceAccount*.json
+secrets/
+credentials/
+
+# Google Cloud service account
+*-service-account.json
